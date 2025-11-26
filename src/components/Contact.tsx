@@ -2,26 +2,50 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { TurnstileWidget } from "@/components/ui/turnstile";
 import { useState } from "react";
 
 export const Contact = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Check if captcha is completed
+    if (!captchaToken) {
+      toast({
+        title: "Please complete the captcha",
+        description: "You need to verify that you're not a robot before submitting.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setIsSubmitting(true);
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    toast({
-      title: "Request Sent!",
-      description: "Our specialist will contact you soon to discuss your project.",
-    });
-    
-    setIsSubmitting(false);
-    (e.target as HTMLFormElement).reset();
+    try {
+      // Simulate form submission with captcha token
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      toast({
+        title: "Request Sent!",
+        description: "Our specialist will contact you soon to discuss your project.",
+      });
+      
+      // Reset form
+      (e.target as HTMLFormElement).reset();
+      setCaptchaToken("");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "There was an error sending your request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -92,10 +116,27 @@ export const Contact = () => {
             />
           </div>
 
+          <div className="space-y-4">
+            <TurnstileWidget
+              siteKey="1x00000000000000000000AA" // Test site key - replace with real one
+              onSuccess={(token) => setCaptchaToken(token)}
+              onError={() => {
+                toast({
+                  title: "Captcha Error",
+                  description: "Failed to load captcha. Please refresh the page.",
+                  variant: "destructive",
+                });
+              }}
+              onExpired={() => setCaptchaToken("")}
+              theme="auto"
+              size="normal"
+            />
+          </div>
+
           <Button 
             type="submit" 
             size="lg" 
-            disabled={isSubmitting}
+            disabled={isSubmitting || !captchaToken}
             className="w-full bg-accent hover:bg-accent/90 text-accent-foreground text-lg py-6 shadow-accent hover:scale-[1.02] transition-all"
           >
             {isSubmitting ? "Sending..." : "Discuss My Project"}

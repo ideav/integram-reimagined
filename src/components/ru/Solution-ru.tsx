@@ -5,7 +5,7 @@ const benefits = [
   {
     icon: Shield,
     title: "Полный контроль над данными",
-    description: "INTEGRAM устанавливается на ваших серверах. Никаких облаков, никакой передачи данных третьим лицам."
+    description: "ИНТЕГРАМ устанавливается на ваших серверах. Никаких облаков, никакой передачи данных третьим лицам."
   },
   {
     icon: Lock,
@@ -40,7 +40,7 @@ export const SolutionRu = () => {
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">
-            INTEGRAM — это безопасность и свобода
+            ИНТЕГРАМ — это безопасность и свобода
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Платформа, которая даёт вам инструменты для создания собственных систем управления данными, 

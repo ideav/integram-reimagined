@@ -39,7 +39,7 @@ export const UseCasesRu = () => {
           Примеры использования
         </h2>
         <p className="text-xl text-muted-foreground text-center mb-16 max-w-3xl mx-auto">
-          INTEGRAM помогает автоматизировать любые процессы, где раньше использовались Excel-файлы
+          ИНТЕГРАМ помогает автоматизировать любые процессы, где раньше использовались Excel-файлы
         </p>
 
         <div className="grid md:grid-cols-2 gap-8">

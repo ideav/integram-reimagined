@@ -1,4 +1,4 @@
-import { Header } from "@/components/Header";
+import { HeaderRu } from "@/components/ru/Header-ru";
 import { HeroRu } from "@/components/ru/Hero-ru";
 import { ProblemsRu } from "@/components/ru/Problems-ru";
 import { SolutionRu } from "@/components/ru/Solution-ru";
@@ -11,7 +11,7 @@ import { FooterRu } from "@/components/ru/Footer-ru";
 const IndexRu = () => {
   return (
     <div className="min-h-screen">
-      <Header />
+      <HeaderRu />
       <main className="pt-16">
         <HeroRu />
         <ProblemsRu />

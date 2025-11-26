@@ -3,9 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { TurnstileWidget } from "@/components/ui/turnstile";
 
 export const ContactRu = () => {
   const { toast } = useToast();
+  const [captchaToken, setCaptchaToken] = useState<string>("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,11 +17,23 @@ export const ContactRu = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Check if captcha is completed
+    if (!captchaToken) {
+      toast({
+        title: "Пожалуйста, пройдите проверку",
+        description: "Необходимо подтвердить, что вы не робот, перед отправкой заявки.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     toast({
       title: "Спасибо за ваше обращение!",
       description: "Мы свяжемся с вами в ближайшее время.",
     });
     setFormData({ name: "", email: "", company: "", message: "" });
+    setCaptchaToken("");
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -37,7 +51,7 @@ export const ContactRu = () => {
             Готовы избавиться от Excel-хаоса?
           </h2>
           <p className="text-xl text-muted-foreground">
-            Оставьте заявку на бесплатную консультацию. Мы покажем, как INTEGRAM может решить ваши задачи.
+            Оставьте заявку на бесплатную консультацию. Мы покажем, как ИНТЕГРАМ может решить ваши задачи.
           </p>
         </div>
 
@@ -99,9 +113,27 @@ export const ContactRu = () => {
             />
           </div>
 
+          <div className="space-y-4">
+            <TurnstileWidget
+              siteKey="1x00000000000000000000AA" // Test site key - replace with real one
+              onSuccess={(token) => setCaptchaToken(token)}
+              onError={() => {
+                toast({
+                  title: "Ошибка загрузки капчи",
+                  description: "Не удалось загрузить капчу. Пожалуйста, обновите страницу.",
+                  variant: "destructive",
+                });
+              }}
+              onExpired={() => setCaptchaToken("")}
+              theme="auto"
+              size="normal"
+            />
+          </div>
+
           <Button 
             type="submit" 
             size="lg" 
+            disabled={!captchaToken}
             className="w-full bg-accent hover:bg-accent/90 text-accent-foreground text-lg"
           >
             Отправить заявку
