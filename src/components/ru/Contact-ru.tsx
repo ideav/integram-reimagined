@@ -3,45 +3,59 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { TurnstileWidget } from "@/components/ui/turnstile";
 
 export const ContactRu = () => {
   const { toast } = useToast();
-  const [captchaToken, setCaptchaToken] = useState<string>("");
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    company: "",
-    message: ""
-  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Check if captcha is completed
-    if (!captchaToken) {
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get('name') as string,
+      phone: formData.get('phone') as string,
+      email: formData.get('email') as string,
+      company: formData.get('company') as string,
+      message: formData.get('message') as string
+    };
+    
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('/send_to_telegram.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
+      
+      const result = await response.json();
+      
+      if (response.ok && result.success) {
+        toast({
+          title: "Спасибо за ваше обращение!",
+          description: "Мы свяжемся с вами в ближайшее время.",
+        });
+        
+        // Reset form
+        (e.target as HTMLFormElement).reset();
+      } else {
+        throw new Error(result.error || 'Не удалось отправить заявку');
+      }
+    } catch (error) {
       toast({
-        title: "Пожалуйста, пройдите проверку",
-        description: "Необходимо подтвердить, что вы не робот, перед отправкой заявки.",
+        title: "Ошибка",
+        description: error instanceof Error ? error.message : "Произошла ошибка при отправке заявки. Попробуйте еще раз.",
         variant: "destructive",
       });
-      return;
+    } finally {
+      setIsSubmitting(false);
     }
-    
-    toast({
-      title: "Спасибо за ваше обращение!",
-      description: "Мы свяжемся с вами в ближайшее время.",
-    });
-    setFormData({ name: "", email: "", company: "", message: "" });
-    setCaptchaToken("");
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
-  };
+  
 
   return (
     <section className="py-20 px-6 bg-background">
@@ -64,26 +78,35 @@ export const ContactRu = () => {
               <Input
                 id="name"
                 name="name"
-                value={formData.name}
-                onChange={handleChange}
                 required
                 placeholder="Иван Иванов"
               />
             </div>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-2">
-                Email *
+              <label htmlFor="phone" className="block text-sm font-medium mb-2">
+                Телефон *
               </label>
               <Input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
+                id="phone"
+                name="phone"
+                type="tel"
                 required
-                placeholder="ivan@company.ru"
+                placeholder="+7 (999) 123-45-67"
               />
             </div>
+          </div>
+
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium mb-2">
+              Email *
+            </label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              required
+              placeholder="ivan@company.ru"
+            />
           </div>
 
           <div>
@@ -93,8 +116,6 @@ export const ContactRu = () => {
             <Input
               id="company"
               name="company"
-              value={formData.company}
-              onChange={handleChange}
               placeholder="ООО «Ваша компания»"
             />
           </div>
@@ -106,54 +127,25 @@ export const ContactRu = () => {
             <Textarea
               id="message"
               name="message"
-              value={formData.message}
-              onChange={handleChange}
               rows={5}
               placeholder="Какой процесс вы хотите автоматизировать?"
-            />
-          </div>
-
-          <div className="space-y-4">
-            <TurnstileWidget
-              siteKey="1x00000000000000000000AA" // Test site key - replace with real one
-              onSuccess={(token) => setCaptchaToken(token)}
-              onError={() => {
-                toast({
-                  title: "Ошибка загрузки капчи",
-                  description: "Не удалось загрузить капчу. Пожалуйста, обновите страницу.",
-                  variant: "destructive",
-                });
-              }}
-              onExpired={() => setCaptchaToken("")}
-              theme="auto"
-              size="normal"
             />
           </div>
 
           <Button 
             type="submit" 
             size="lg" 
-            disabled={!captchaToken}
+            disabled={isSubmitting}
             className="w-full bg-accent hover:bg-accent/90 text-accent-foreground text-lg"
           >
-            Отправить заявку
+            {isSubmitting ? "Отправка..." : "Отправить заявку"}
           </Button>
+
+          <p className="text-sm text-muted-foreground text-center">
+            Нажимая на кнопку, вы даете согласие на обработку персональных данных и соглашаетесь с Условиями использования
+          </p>
         </form>
 
-        <div className="mt-12 grid md:grid-cols-3 gap-6 text-center">
-          <div>
-            <h3 className="font-display font-semibold mb-2">Email</h3>
-            <p className="text-muted-foreground">info@integram.io</p>
-          </div>
-          <div>
-            <h3 className="font-display font-semibold mb-2">Телефон</h3>
-            <p className="text-muted-foreground">+7 (495) 123-4567</p>
-          </div>
-          <div>
-            <h3 className="font-display font-semibold mb-2">Поддержка</h3>
-            <p className="text-muted-foreground">24/7</p>
-          </div>
-        </div>
       </div>
     </section>
   );
