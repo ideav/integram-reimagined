@@ -18,7 +18,7 @@ export const HeroRu = () => {
               size="lg" 
               className="bg-accent hover:bg-accent/90 text-accent-foreground shadow-accent text-lg px-8 py-6 transition-all hover:scale-105"
             >
-              Получить бесплатную консультацию
+              <a href="#contact">Получить бесплатную консультацию</a>
             </Button>
           </div>
           <p className="text-white/80 text-lg pt-8">

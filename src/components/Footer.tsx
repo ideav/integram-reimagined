@@ -29,8 +29,9 @@ export const Footer = () => {
             <h3 className="font-display font-semibold mb-4">Contact</h3>
             <ul className="space-y-2 text-sm text-background/80">
               <li>Email: info@integram.io</li>
-              <li>Phone: +1 (555) 123-4567</li>
-              <li>Support: 24/7</li>
+              <li>Телефон: +7 (995) 506-0167</li>
+              <li>АО Интеграм, ИНН 9716002710</li>
+              <li>Телеграм: <a target="_blank" href="https://t.me/ideavr" className="hover:text-background transition-colors">t.me/ideavr</a></li>
             </ul>
           </div>
         </div>

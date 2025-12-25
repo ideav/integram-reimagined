@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Menu, Globe } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useState } from "react";
-import { useLocation, Link } from "react-router-dom";
 
 const navigation = [
   { name: "Решения", href: "#solution" },
@@ -13,8 +12,6 @@ const navigation = [
 
 export const HeaderRu = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const location = useLocation();
-  const isRussian = location.pathname === '/ru';
 
   return (
     <header className="fixed top-0 w-full bg-background/80 backdrop-blur-lg border-b border-border z-50">
@@ -41,15 +38,11 @@ export const HeaderRu = () => {
           </div>
 
           <div className="hidden lg:flex items-center gap-4">
-            <Link to={isRussian ? "/" : "/ru"}>
-              <Button variant="ghost" size="sm" className="gap-2">
-                <Globe className="w-4 h-4" />
-                {isRussian ? "EN" : "RU"}
+            <a href="#contact">
+              <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">
+              Начать
               </Button>
-            </Link>
-            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">
-              {isRussian ? "Начать" : "Get Started"}
-            </Button>
+            </a>
           </div>
 
           {/* Mobile menu button */}
@@ -75,14 +68,8 @@ export const HeaderRu = () => {
               </a>
             ))}
             <div className="px-4 pt-2 space-y-2">
-              <Link to={isRussian ? "/" : "/ru"} className="block">
-                <Button variant="ghost" size="sm" className="w-full gap-2">
-                  <Globe className="w-4 h-4" />
-                  {isRussian ? "English" : "Русский"}
-                </Button>
-              </Link>
               <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                {isRussian ? "Начать" : "Get Started"}
+                Начать
               </Button>
             </div>
           </div>

@@ -1,37 +1,37 @@
-import { Header } from "@/components/Header";
-import { Hero } from "@/components/Hero";
-import { Problems } from "@/components/Problems";
-import { Solution } from "@/components/Solution";
-import { UseCases } from "@/components/UseCases";
-import { Process } from "@/components/Process";
-import { FAQ } from "@/components/FAQ";
-import { Contact } from "@/components/Contact";
-import { Footer } from "@/components/Footer";
+import { HeaderRu } from "@/components/ru/Header-ru";
+import { HeroRu } from "@/components/ru/Hero-ru";
+import { ProblemsRu } from "@/components/ru/Problems-ru";
+import { SolutionRu } from "@/components/ru/Solution-ru";
+import { UseCasesRu } from "@/components/ru/UseCases-ru";
+import { ProcessRu } from "@/components/ru/Process-ru";
+import { FAQRu } from "@/components/ru/FAQ-ru";
+import { ContactRu } from "@/components/ru/Contact-ru";
+import { FooterRu } from "@/components/ru/Footer-ru";
 
 const Index = () => {
   return (
     <div className="min-h-screen">
-      <Header />
+      <HeaderRu />
       <main className="pt-16">
-        <Hero />
-        <Problems />
+        <HeroRu />
+        <ProblemsRu />
         <section id="solution">
-          <Solution />
+          <SolutionRu />
         </section>
         <section id="use-cases">
-          <UseCases />
+          <UseCasesRu />
         </section>
         <section id="process">
-          <Process />
+          <ProcessRu />
         </section>
         <section id="faq">
-          <FAQ />
+          <FAQRu />
         </section>
         <section id="contact">
-          <Contact />
+          <ContactRu />
         </section>
       </main>
-      <Footer />
+      <FooterRu />
     </div>
   );
 };
